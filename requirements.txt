@@ -1,3 +1,3 @@
-django==4.1.7
-django-admin==2.0.2
-django-extensions==3.2.1
+django
+django-admin
+django-extensions
