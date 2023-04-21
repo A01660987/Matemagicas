@@ -19,4 +19,4 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('game.urls'))
-]
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
