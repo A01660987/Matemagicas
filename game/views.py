@@ -76,7 +76,7 @@ def register_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('inicio')
 
 def validar_estudiante(request):
     if(request.method == 'POST'):
@@ -98,3 +98,9 @@ def progreso(request):
         alumno.nivel_actual = nivel_actual
         alumno.save()
         pass
+
+def get_grupos(request):
+    profesor = Profesor.objects.get(username=request.user.username)
+    grupos = Grupo.objects.filter(profesor=profesor)
+    context = [grupo.numero for grupo in grupos]
+    return render(request, 'dashboard.html', context)
