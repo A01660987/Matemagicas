@@ -11,7 +11,7 @@ class Profesor(models.Model):
     
 class Grupo(models.Model):
     profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, related_name='grupos')
-    numero = models.IntegerField()
+    numero = models.IntegerField(unique=True)
     
 class Alumno(models.Model):
     grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, related_name='alumnos')

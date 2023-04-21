@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.csrf import csrf_exempt
 from .forms import RegisterUserForm
 from.models import *
 
@@ -43,13 +44,20 @@ def login_admin(request):
             return redirect('admin')
     return render(request, 'admin.html')
 
+def logout_user(request):
+    logout(request)
+    return redirect('inicio')
+
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    profesor = Profesor.objects.get(username=request.user.username)
+    grupos = Grupo.objects.filter(profesor=profesor)
+    return render(request, 'dashboard.html', {'grupos': grupos})
 
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
-    return render(request, 'manage.html')
+    profesores = Profesor.objects.all()
+    return render(request, 'manage.html', {'profesores': profesores})
 
 def register_user(request):
     if(request.method == 'POST'):
@@ -74,21 +82,32 @@ def register_user(request):
             messages.error(request, 'error al registrar profesor')
     return redirect('manage')
 
-def logout_user(request):
-    logout(request)
-    return redirect('inicio')
+def new_group(request):
+    if(request.method == 'POST'):
+        username = request.POST['profesor']
+        numero = request.POST['numero']
+        try:
+            grupo = Grupo.objects.get(numero=numero)
+            messages.error(request, 'un grupo con ese número ya existe')
+        except Grupo.DoesNotExist:
+            profesor = Profesor.objects.get(username=username)
+            grupo = Grupo(profesor=profesor, numero=numero)
+            grupo.save()
+            messages.success(request, 'grupo creado exitosamente')
+    return redirect('manage')
 
+@csrf_exempt
 def validar_estudiante(request):
     if(request.method == 'POST'):
-        grupo = request.POST['grupo']
-        num_lista = request.POST['num_lista']
+        grupo = request.POST.get('grupo')
+        num_lista = request.POST.get('num_lista')
         try:
             alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
-            nivel_actual = alumno.nivel_actual
-            return JsonResponse({'nivel_actual': nivel_actual})
+            return JsonResponse({'nivel_actual': alumno.nivel_actual})
         except Alumno.DoesNotExist:
             return JsonResponse({'nivel_actual': 0})
-        
+
+@csrf_exempt        
 def progreso(request):
     if(request.method == 'POST'):
         grupo = request.POST['grupo']
@@ -98,9 +117,3 @@ def progreso(request):
         alumno.nivel_actual = nivel_actual
         alumno.save()
         pass
-
-def get_grupos(request):
-    profesor = Profesor.objects.get(username=request.user.username)
-    grupos = Grupo.objects.filter(profesor=profesor)
-    context = [grupo.numero for grupo in grupos]
-    return render(request, 'dashboard.html', context)

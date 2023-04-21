@@ -17,8 +17,8 @@
 </nav>
 
 <div class="container-fluid d-flex">
-    {% for numero in numeros %}
-    <button type="button" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ numero }}</button>
+    {% for grupo in grupos %}
+        <button type="button" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ grupo.numero }}</button>
     {% endfor %}
 </div>
 
