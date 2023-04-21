@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['matemagicas.azurewebsites.net']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://matemagicas.azurewebsites.net'
+]
+
 
 # Application definition
 
