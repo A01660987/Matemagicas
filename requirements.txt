@@ -1,4 +1,2 @@
-wheel
 django
 django-admin
-django-extensions
