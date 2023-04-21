@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>
+    Administradores · Matemágicas
+</title>
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-lg mb-5" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand logo" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link fs-3 px-4" href="/">inicio</a>
+            <a class="nav-link fs-3 px-4" href="/login">dashboard</a>
+            <a class="nav-link fw-semibold fs-3 px-4 active user-select-none" aria-current="page">admin</a>
+        </div>
+    </div>
+</nav>
+
+<div class="row">
+    <div class="col-8">
+        <h1 class="display-1 lh-1 mb-4 fw-medium text-white">
+            inicia sesión como administrador
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <input name="username" type="username" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="usuario">
+            </div>
+            <div class="mb-4">
+                <input name="password" type="password" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="contraseña">
+            </div>
+            <button type="submit" class="btn px-4 fs-2 mb-4 fw-medium text-center form-control-lg rounded-pill shadow bg-purple text-white">iniciar sesión</button>
+        </form>
+
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible w-50 form-control-lg rounded-pill fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>
+    Administración · Matemágicas
+</title>
+{% endblock %}
+
+{% block main %}
+
+<nav class="navbar navbar-expand-lg mb-3" data-bs-theme="dark">
+    <div class="container-fluid">
+        <span class="navbar-brand fs-1 fw-semibold">Admin</span>
+        <a class="navbar-brand logo ms-auto" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
+    </div>
+</nav>
+
+<div>
+    {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fs-4 rounded-pill fade show text-center" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="container-fluid d-flex">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">crear grupo</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">cerrar sesión</button>
+</div>
+
+<div class="modal fade" data-bs-theme="dark" id="newprof" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Agregar profesor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'register' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input name="first_name" type="first_name" class="form-control text-center rounded-pill" placeholder="nombre(s)">
+                    </div>
+                    <div class="mb-3">
+                        <input name="last_name" type="last_name" class="form-control text-center rounded-pill" placeholder="apellidos">
+                    </div>
+                    <div class="mb-3">
+                        <input name="username" type="username" class="form-control text-center rounded-pill" placeholder="nombre de usuario">
+                    </div>
+                    <div class="mb-3">
+                        <input name="password1" type="password" class="form-control text-center rounded-pill" placeholder="crear contraseña">
+                    </div>
+                    <div class="mb-3">
+                        <input name="password2" type="password" class="form-control text-center rounded-pill" placeholder="confirmar contraseña">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn bg-purple text-white rounded-pill">Agregar profesor</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+
+{% endblock %}
