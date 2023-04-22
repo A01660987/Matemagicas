@@ -16,10 +16,17 @@
     </div>
 </nav>
 
+<div>
+    <h1 class="text-white ps-3">grupos asignados:</h1>
+    <div class="container-fluid d-flex">
+        {% for grupo in grupos %}
+            <a href="dashboard/{{ grupo.numero }}" type="button" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ grupo.numero }}</a>
+        {% endfor %}
+    </div>
+</div> 
+
 <div class="container-fluid d-flex">
-    {% for grupo in grupos %}
-        <button type="button" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ grupo.numero }}</button>
-    {% endfor %}
+    <a href="/logout" type="button" class="btn px-4 my-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">cerrar sesión</a>
 </div>
 
 {% endblock %}

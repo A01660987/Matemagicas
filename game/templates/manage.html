@@ -25,8 +25,27 @@
     {% endfor %}
 </div>
 
+<div>
+    <h1 class="text-white ps-3">todos los grupos:</h1>
+    <div class="container-fluid d-flex mb-5">
+        {% for grupo in grupos %}
+            <a href="manage/{{ grupo.numero }}" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ grupo.numero }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<div>
+    <h1 class="text-white ps-3">todos los profesores:</h1>
+    <div class="container-fluid d-flex mb-5">
+        {% for profesor in profesores %}
+            <a class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ profesor.first_name }} {{ profesor.last_name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
 <div class="container-fluid d-flex">
     <button type="button" data-bs-toggle="modal" data-bs-target="#newprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">eliminar profesor</button>
     <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">crear grupo</button>
     <a href="/logout" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">cerrar sesión</a>
 </div>
@@ -70,7 +89,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 text-white">Agregar profesor</h1>
+                <h1 class="modal-title fs-5 text-white">Crear grupo</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="{% url 'newgroup' %}" data-bs-theme="light">
@@ -91,6 +110,36 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn bg-purple text-white rounded-pill">Crear grupo</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-theme="dark" id="delprof" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white">Eliminar profesor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'del_profe' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h2 class="text-white">ADVERTENCIA: ¡Eliminar a un profesor también eliminará a todos sus grupos y sus alumnos!</h2>
+                        <select name="username" type="username" class="form-select form-control text-center rounded-pill">
+                            <option selected disabled hidden>profesor a eliminar</option>
+                            {% for profesor in profesores %}
+                                <option value="{{ profesor.username }}">{{ profesor.first_name }} {{ profesor.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="numero" value="{{ grupo.numero }}">	
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger text-white rounded-pill">Eliminar profesor</button>
                 </div>
             </form>
       </div>

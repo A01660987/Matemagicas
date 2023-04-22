@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>
+    Grupo {{ grupo.numero }} · Matemágicas
+</title>
+{% endblock %}
+
+{% block main %}
+
+<nav class="navbar navbar-expand-lg mb-3" data-bs-theme="dark">
+    <div class="container-fluid">
+        <span class="navbar-brand fs-1 fw-semibold">Admin: Grupo {{ grupo.numero }}</span>
+        <a class="navbar-brand logo ms-auto" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
+    </div>
+</nav>
+
+<div>
+    {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fs-4 rounded-pill fade show text-center" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+
+<div>
+    <h1 class="text-white ps-3">profesor: {{ profesor.first_name }} {{ profesor.last_name }}</h1>
+</div>
+
+<div>
+    <h1 class="text-white ps-3">alumnos:</h1>
+    <div class="container-fluid d-flex flex-wrap mb-5">
+        {% for alumno in alumnos %}
+            <button type="button" data-bs-toggle="modal" data-bs-target="#del_alum" class="btn px-4 me-3 mb-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ alumno.num_lista }}. {{ alumno.first_name }} {{ alumno.last_name }}</button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container-fluid d-flex">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newalum" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar alumno</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delalum" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">eliminar alumno</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">eliminar grupo</button>
+    <a href="/manage" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
+</div>
+
+<div class="modal fade" data-bs-theme="dark" id="delalum" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white">Eliminar alumno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'del_alumno' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <select name="num_lista" type="num_lista" class="form-select form-control text-center rounded-pill">
+                            <option selected disabled hidden>alumno a eliminar</option>
+                            {% for alumno in alumnos %}
+                                <option value="{{ alumno.num_lista }}">{{ alumno.first_name }} {{ alumno.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="numero" value="{{ grupo.numero }}">	
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger text-white rounded-pill">Eliminar alumno</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-theme="dark" id="newalum" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white">Agregar alumno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'new_alumno' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input name="first_name" type="first_name" class="form-control text-center rounded-pill" placeholder="nombre(s)">
+                    </div>
+                    <div class="mb-3">
+                        <input name="last_name" type="last_name" class="form-control text-center rounded-pill" placeholder="apellidos">
+                    </div>
+                    <input type="hidden" name="numero" value="{{ grupo.numero }}">	
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn bg-purple text-white rounded-pill">Agregar alumno</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-theme="dark" id="delgroup" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white">Eliminar grupo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'del_group' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div>
+                        <h5 class="text-white">¿Estás seguro que quieres eliminar el grupo {{ grupo.numero }} y todos sus alumnos?</h5>
+                    </div>
+                    <input type="hidden" name="numero" value="{{ grupo.numero }}">	
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger text-white rounded-pill">Eliminar grupo</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

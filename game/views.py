@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from .forms import RegisterUserForm
@@ -54,10 +55,17 @@ def dashboard(request):
     grupos = Grupo.objects.filter(profesor=profesor)
     return render(request, 'dashboard.html', {'grupos': grupos})
 
+def dashboard_group(request, numero):
+    profesor = Profesor.objects.get(username=request.user.username)
+    grupo = Grupo.objects.get(numero=numero, profesor=profesor)
+    alumnos = Alumno.objects.filter(grupo=grupo)
+    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos})
+
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
     profesores = Profesor.objects.all()
-    return render(request, 'manage.html', {'profesores': profesores})
+    grupos = Grupo.objects.all()
+    return render(request, 'manage.html', {'profesores': profesores, 'grupos': grupos})
 
 def register_user(request):
     if(request.method == 'POST'):
@@ -95,6 +103,68 @@ def new_group(request):
             grupo.save()
             messages.success(request, 'grupo creado exitosamente')
     return redirect('manage')
+
+def manage_group(request, numero):
+    grupo = Grupo.objects.get(numero=numero)
+    alumnos = Alumno.objects.filter(grupo=grupo)
+    profesor = grupo.profesor
+    return render(request, 'manage_group.html', {'grupo': grupo, 'alumnos': alumnos, 'profesor': profesor})
+
+def new_alumno(request):
+    if (request.method == 'POST'):
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        numero = request.POST['numero']
+        grupo = Grupo.objects.get(numero=numero)
+        alumnos = Alumno.objects.filter(grupo=grupo)
+        num_lista = 1
+        for alumno in alumnos:
+            if alumno.num_lista >= num_lista:
+                num_lista = alumno.num_lista + 1
+        try:
+            alumno = Alumno(first_name=first_name, last_name=last_name, grupo=grupo, num_lista=num_lista, nivel_actual=1)
+            alumno.save()
+            messages.success(request, 'alumno creado exitosamente')
+        except:
+            messages.error(request, 'error al crear alumno')
+        return redirect('manage_group', numero=numero)
+    
+def del_profe(request):
+    if (request.method == 'POST'):
+        username = request.POST['username']
+        profesor = Profesor.objects.get(username=username)
+        user = User.objects.get(username=username)
+        grupos = Grupo.objects.filter(profesor=profesor)
+        for grupo in grupos:
+            alumnos = Alumno.objects.filter(grupo=grupo)
+            for alumno in alumnos:
+                alumno.delete()
+            grupo.delete()
+        profesor.delete()
+        user.delete()
+        messages.success(request, 'profesor eliminado exitosamente')
+    return redirect('manage')
+
+def del_group(request):
+    if (request.method == 'POST'):
+        numero = request.POST['numero']
+        grupo = Grupo.objects.get(numero=numero)
+        alumnos = Alumno.objects.filter(grupo=grupo)
+        for alumno in alumnos:
+            alumno.delete()
+        grupo.delete()
+        messages.success(request, 'grupo eliminado exitosamente')
+    return redirect('manage')
+
+def del_alumno(request):
+    if (request.method == 'POST'):
+        numero = request.POST['numero']
+        grupo = Grupo.objects.get(numero=numero)
+        num_lista = request.POST['num_lista']
+        alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
+        alumno.delete()
+        messages.success(request, 'alumno eliminado exitosamente')
+    return redirect('manage_group', numero=numero)
 
 @csrf_exempt
 def validar_estudiante(request):

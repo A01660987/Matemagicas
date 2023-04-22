@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>
+    Grupo {{ grupo.numero }} · Matemágicas
+</title>
+{% endblock %}
+
+{% block main %}
+
+<nav class="navbar navbar-expand-lg mb-3" data-bs-theme="dark">
+    <div class="container-fluid">
+        <span class="navbar-brand fs-1 fw-semibold">dashboard de {{ request.user.first_name }}</span>
+        <a class="navbar-brand logo ms-auto" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
+    </div>
+</nav>
+
+<div>
+    <h1 class="text-white ps-3">grupo {{ grupo.numero }}</h1>
+</div>
+
+<div>
+    <h1 class="text-white ps-3">alumnos:</h1>
+    <div class="container-fluid d-flex flex-wrap mb-5">
+        {% for alumno in alumnos %}
+            <button type="button" data-bs-toggle="modal" data-bs-target="#del_alum" class="btn px-4 me-3 mb-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ alumno.num_lista }}. {{ alumno.first_name }} {{ alumno.last_name }}</button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container-fluid d-flex">
+    <button type="button" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">promedio grupo</button>
+    <button type="button" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">ver estadísticas</button>
+    <a href="/dashboard" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
+</div>
+
+{% endblock %}
