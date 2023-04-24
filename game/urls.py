@@ -18,5 +18,8 @@ urlpatterns = [
     path('del_group', views.del_group, name='del_group'),
     path('del_alumno', views.del_alumno, name='del_alumno'),
     path('validar_estudiante', views.validar_estudiante, name='validar_estudiante'),
-    path('progreso', views.progreso, name='progreso')
+    path('progreso', views.progreso, name='progreso'),
+    path('nuevo_intento', views.nuevo_intento, name='nuevo_intento'),
+    path('obtener_aciertos', views.obtener_aciertos, name='obtener_aciertos'),
+    path('promedio_grupo', views.promedio_grupo, name='promedio_grupo')
 ]

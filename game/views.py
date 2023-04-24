@@ -192,3 +192,44 @@ def progreso(request):
         alumno.nivel_actual = nivel_actual
         alumno.save()
         return JsonResponse({"success": True})
+
+@csrf_exempt
+def nuevo_intento(request):
+    if(request.method == 'POST'):
+        data = json.loads(request.body)
+        numero = data['grupo']
+        num_lista = data['num_lista']
+        intento = data['aciertos']
+        grupo = Grupo.objects.get(numero=numero)
+        alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
+        aciertos = alumno.get_aciertos()
+        aciertos.append(intento)
+        alumno.set_aciertos(aciertos)
+        alumno.save()
+        return JsonResponse({"success": True})
+
+@csrf_exempt
+def obtener_aciertos(request):
+    if(request.method == 'POST'):
+        data = json.loads(request.body)
+        numero = data['grupo']
+        num_lista = data['num_lista']
+        grupo = Grupo.objects.get(numero=numero)
+        alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
+        aciertos = alumno.get_aciertos()
+        return JsonResponse({"aciertos_n3": aciertos})
+
+@csrf_exempt 
+def promedio_grupo(request):
+    if(request.method == 'POST'):
+        suma = 0
+        elementos = 0
+        numero = request.POST['numero']
+        grupo = Grupo.objects.get(numero=numero)
+        alumnos = Alumno.objects.filter(grupo=grupo)
+        for alumno in alumnos:
+            aciertos = alumno.get_aciertos()
+            suma += sum(aciertos)
+            elementos += len(aciertos)
+        promedio = suma / elementos
+        return JsonResponse({"promedio": promedio})

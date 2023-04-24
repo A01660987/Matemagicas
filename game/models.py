@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from datetime import date
+import json
 
 
 class Profesor(models.Model):
@@ -19,6 +19,12 @@ class Alumno(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     nivel_actual = models.IntegerField(default=1)
+    aciertos_n3 = models.TextField(default=[])
+    def set_aciertos(self, aciertos):
+        self.aciertos_n3 = json.dumps(aciertos)
+
+    def get_aciertos(self):
+        return json.loads(self.aciertos_n3)
 
 class Ajustes(models.Model):
     alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE)
