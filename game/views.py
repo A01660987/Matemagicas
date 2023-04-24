@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from .forms import RegisterUserForm
 from.models import *
+import json
 
 def inicio(request):
     return render(request, 'inicio.html')
@@ -169,21 +170,25 @@ def del_alumno(request):
 @csrf_exempt
 def validar_estudiante(request):
     if(request.method == 'POST'):
-        grupo = request.POST.get('grupo')
-        num_lista = request.POST.get('num_lista')
+        data = json.loads(request.body)
+        numero = data['grupo']
+        num_lista = data['num_lista']
         try:
+            grupo = Grupo.objects.get(numero=numero)
             alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
             return JsonResponse({'nivel_actual': alumno.nivel_actual})
-        except Alumno.DoesNotExist:
+        except:
             return JsonResponse({'nivel_actual': 0})
 
 @csrf_exempt        
 def progreso(request):
     if(request.method == 'POST'):
-        grupo = request.POST['grupo']
-        num_lista = request.POST['num_lista']
-        nivel_actual = request.POST['nivel_actual']
+        data = json.loads(request.body)
+        numero = data['grupo']
+        num_lista = data['num_lista']
+        nivel_actual = data['nivel_actual']
+        grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
         alumno.nivel_actual = nivel_actual
         alumno.save()
-        pass
+        return JsonResponse({"success": True})
