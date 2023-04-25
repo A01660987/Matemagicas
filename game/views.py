@@ -60,7 +60,8 @@ def dashboard_group(request, numero):
     profesor = Profesor.objects.get(username=request.user.username)
     grupo = Grupo.objects.get(numero=numero, profesor=profesor)
     alumnos = Alumno.objects.filter(grupo=grupo)
-    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos})
+    promedio = promedio_grupo(numero)
+    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio': promedio})
 
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
@@ -135,12 +136,6 @@ def del_profe(request):
         username = request.POST['username']
         profesor = Profesor.objects.get(username=username)
         user = User.objects.get(username=username)
-        grupos = Grupo.objects.filter(profesor=profesor)
-        for grupo in grupos:
-            alumnos = Alumno.objects.filter(grupo=grupo)
-            for alumno in alumnos:
-                alumno.delete()
-            grupo.delete()
         profesor.delete()
         user.delete()
         messages.success(request, 'profesor eliminado exitosamente')
@@ -150,9 +145,6 @@ def del_group(request):
     if (request.method == 'POST'):
         numero = request.POST['numero']
         grupo = Grupo.objects.get(numero=numero)
-        alumnos = Alumno.objects.filter(grupo=grupo)
-        for alumno in alumnos:
-            alumno.delete()
         grupo.delete()
         messages.success(request, 'grupo eliminado exitosamente')
     return redirect('manage')
@@ -199,13 +191,11 @@ def nuevo_intento(request):
         data = json.loads(request.body)
         numero = data['grupo']
         num_lista = data['num_lista']
-        intento = data['aciertos']
+        aciertos = data['aciertos']
         grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
-        aciertos = alumno.get_aciertos()
-        aciertos.append(intento)
-        alumno.set_aciertos(aciertos)
-        alumno.save()
+        intento = Intentos(alumno=alumno, aciertos=aciertos)
+        intento.save()
         return JsonResponse({"success": True})
 
 @csrf_exempt
@@ -219,17 +209,36 @@ def obtener_aciertos(request):
         aciertos = alumno.get_aciertos()
         return JsonResponse({"aciertos_n3": aciertos})
 
-@csrf_exempt 
-def promedio_grupo(request):
+def promedio_grupo(numero):
+    suma = 0
+    elementos = 0
+    grupo = Grupo.objects.get(numero=numero)
+    alumnos = Alumno.objects.filter(grupo=grupo)
+    for alumno in alumnos:
+        aciertos = alumno.get_aciertos()
+        suma += sum(aciertos)
+        elementos += len(aciertos)
+    promedio = suma / elementos
+    return promedio
+    
+def update(request):
     if(request.method == 'POST'):
-        suma = 0
-        elementos = 0
-        numero = request.POST['numero']
-        grupo = Grupo.objects.get(numero=numero)
-        alumnos = Alumno.objects.filter(grupo=grupo)
-        for alumno in alumnos:
-            aciertos = alumno.get_aciertos()
-            suma += sum(aciertos)
-            elementos += len(aciertos)
-        promedio = suma / elementos
-        return JsonResponse({"promedio": promedio})
+        profesor = request.POST['profesor']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        password = request.POST['password1']
+        user = User.objects.get(username=profesor)
+        profe = Profesor.objects.get(username=profesor)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.username = username
+        user.set_password(password)
+        user.save()
+        profe.first_name = first_name
+        profe.last_name = last_name
+        profe.username = username
+        profe.password = password
+        profe.save()
+        messages.success(request, 'profesor editado exitosamente')
+    return redirect('manage')

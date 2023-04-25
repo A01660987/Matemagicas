@@ -21,5 +21,6 @@ urlpatterns = [
     path('progreso', views.progreso, name='progreso'),
     path('nuevo_intento', views.nuevo_intento, name='nuevo_intento'),
     path('obtener_aciertos', views.obtener_aciertos, name='obtener_aciertos'),
-    path('promedio_grupo', views.promedio_grupo, name='promedio_grupo')
+    path('promedio_grupo', views.promedio_grupo, name='promedio_grupo'),
+    path('update', views.update, name='update'),
 ]

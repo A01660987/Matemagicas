@@ -19,12 +19,11 @@ class Alumno(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     nivel_actual = models.IntegerField(default=1)
-    aciertos_n3 = models.TextField(default=[])
-    def set_aciertos(self, aciertos):
-        self.aciertos_n3 = json.dumps(aciertos)
-
-    def get_aciertos(self):
-        return json.loads(self.aciertos_n3)
+    
+class Intentos(models.Model):
+    alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE, related_name='intentos')
+    aciertos = models.IntegerField(null=False)
+    timestamp = models.DateTimeField(auto_now=True)
 
 class Ajustes(models.Model):
     alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE)

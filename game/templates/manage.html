@@ -45,6 +45,7 @@
 
 <div class="container-fluid d-flex">
     <button type="button" data-bs-toggle="modal" data-bs-target="#newprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#edit" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">editar profesor</button>
     <button type="button" data-bs-toggle="modal" data-bs-target="#delprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">eliminar profesor</button>
     <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">crear grupo</button>
     <a href="/logout" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">cerrar sesión</a>
@@ -146,5 +147,47 @@
     </div>
 </div>
 
+<div class="modal fade" data-bs-theme="dark" id="edit" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-white">Editar profesor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'update' %}" data-bs-theme="light">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <select name="profesor" type="profesor" class="mb-3 form-select form-control text-center rounded-pill">
+                            <option selected disabled hidden>profesor a editar</option>
+                            {% for profesor in profesores %}
+                                <option value="{{ profesor.username }}">{{ profesor.first_name }} {{ profesor.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="mb-3">
+                            <input name="first_name" type="first_name" class="form-control text-center rounded-pill" placeholder="nombre(s)">
+                        </div>
+                        <div class="mb-3">
+                            <input name="last_name" type="last_name" class="form-control text-center rounded-pill" placeholder="apellidos">
+                        </div>
+                        <div class="mb-3">
+                            <input name="username" type="username" class="form-control text-center rounded-pill" placeholder="nombre de usuario">
+                        </div>
+                        <div class="mb-3">
+                            <input name="password1" type="password" class="form-control text-center rounded-pill" placeholder="nueva contraseña">
+                        </div>
+                        <div class="mb-3">
+                            <input name="password2" type="password" class="form-control text-center rounded-pill" placeholder="confirmar contraseña">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn bg-purple text-white rounded-pill">Confirmar</button>
+                </div>
+            </form>
+      </div>
+    </div>
+</div>
 
 {% endblock %}
