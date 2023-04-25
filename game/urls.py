@@ -20,7 +20,6 @@ urlpatterns = [
     path('validar_estudiante', views.validar_estudiante, name='validar_estudiante'),
     path('progreso', views.progreso, name='progreso'),
     path('nuevo_intento', views.nuevo_intento, name='nuevo_intento'),
-    path('obtener_aciertos', views.obtener_aciertos, name='obtener_aciertos'),
-    path('promedio_grupo', views.promedio_grupo, name='promedio_grupo'),
+    path('intentos_grupo/<int:numero>', views.intentos_grupo, name='intentos_grupo'),
     path('update', views.update, name='update'),
 ]

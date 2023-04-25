@@ -31,8 +31,41 @@
 
 <h2 class="ps-3 text-white">promedio de aciertos en el nivel 3: <strong>{{ promedio }}</strong></h2>
 
+<div class="bg-light mt-3 mb-5 rounded-3">
+    <canvas id="intentos_grupo"></canvas>
+</div>
+
+<script>
+    $.getJSON('/intentos_grupo/{{ grupo.numero }}', function(data) {
+    var etiquetas = data.datos.map(function(obj) {
+        return obj.aciertos;
+    });
+    var valores = data.datos.map(function(obj) {
+        return obj.timestamp;
+    });
+    const ctx = document.getElementById('intentos_grupo');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: 'Total de horas dedicadas',
+                data: valores,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
+
 <div class="container-fluid d-flex">
-    <button type="button" class="btn px-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">ver estadísticas</button>
     <a href="/dashboard" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
 </div>
 

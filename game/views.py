@@ -198,27 +198,31 @@ def nuevo_intento(request):
         intento.save()
         return JsonResponse({"success": True})
 
-@csrf_exempt
-def obtener_aciertos(request):
-    if(request.method == 'POST'):
-        data = json.loads(request.body)
-        numero = data['grupo']
-        num_lista = data['num_lista']
-        grupo = Grupo.objects.get(numero=numero)
-        alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
-        aciertos = alumno.get_aciertos()
-        return JsonResponse({"aciertos_n3": aciertos})
+def intentos_grupo(request, numero):
+    grupo = Grupo.objects.get(numero=numero)
+    alumnos = Alumno.objects.filter(grupo=grupo)
+    intentos = Intentos.objects.filter(alumno__in=alumnos)
+    datos = []
+    for intento in intentos:
+        datos.append({
+            "aciertos": intento.aciertos,
+            "timestamp": intento.timestamp
+        })
+    return JsonResponse({"intentos": datos})
 
 def promedio_grupo(numero):
     suma = 0
     elementos = 0
     grupo = Grupo.objects.get(numero=numero)
     alumnos = Alumno.objects.filter(grupo=grupo)
-    for alumno in alumnos:
-        aciertos = alumno.get_aciertos()
-        suma += sum(aciertos)
-        elementos += len(aciertos)
-    promedio = suma / elementos
+    intentos = Intentos.objects.filter(alumno__in=alumnos)
+    for intento in intentos:
+        suma += intento.aciertos
+        elementos += 1
+    try:
+        promedio = round(suma / elementos, 3)
+    except:
+        promedio = 0
     return promedio
     
 def update(request):
