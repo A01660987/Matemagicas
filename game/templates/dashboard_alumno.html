@@ -20,30 +20,20 @@
 
 <div>
     <h1 class="text-white ps-3">grupo {{ grupo.numero }}</h1>
+    <h1 class="text-white ps-3">alumno: {{ alumno.first_name }} {{ alumno.last_name }}</h1>
 </div>
-
-<div>
-    <h1 class="text-white ps-3">alumnos:</h1>
-    <div class="container-fluid d-flex flex-wrap mb-5">
-        {% for alumno in alumnos %}
-            <a href="/dashboard/{{ grupo.numero }}/{{ alumno.num_lista }}" type="button" class="btn px-4 me-3 mb-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ alumno.num_lista }}. {{ alumno.first_name }} {{ alumno.last_name }}</a>
-        {% endfor %}
-    </div>
-</div>
-
-<h2 class="ps-3 text-white">promedio de aciertos en el nivel 3: <strong>{{ promedio }}</strong></h2>
 
 <div class="bg-light mt-3 mb-5 rounded-3">
-    <canvas id="intentos_grupo" height="100"></canvas>
+    <canvas id="intentos_alumno" height="100"></canvas>
 </div>
 <script>
-    $.getJSON('/intentos_grupo/{{ grupo.numero }}', function(data) {
+    $.getJSON('/intentos_alumno/{{ grupo.numero }}/{{ alumno.num_lista }}', function(data) {
         var datos = data.intentos;
         var aciertos = datos.map(function(d) { return d.aciertos });
 
         var fechas = datos.map(function(d) { return new Date(d.timestamp) });
 
-        const ctx = document.getElementById('intentos_grupo');
+        const ctx = document.getElementById('intentos_alumno');
         new Chart(ctx, {
             type: 'scatter',
             data: {
@@ -66,7 +56,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: "Intentos y aciertos del grupo {{ grupo.numero }}"
+                        text: "Intentos y aciertos de {{ alumno.first_name }} {{ alumno.last_name }}"
                     },
                     legend: {
                         position: 'bottom'
@@ -78,7 +68,7 @@
 </script>
 
 <div class="container-fluid d-flex">
-    <a href="/dashboard" type="button" class="btn px-4 ms-auto mb-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
+    <a href="/dashboard/{{ grupo.numero }}" type="button" class="btn px-4 ms-auto mb-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
 </div>
 
 {% endblock %}

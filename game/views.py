@@ -63,6 +63,13 @@ def dashboard_group(request, numero):
     promedio = promedio_grupo(numero)
     return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio': promedio})
 
+def dashboard_alumno(request, numero, lista):
+    profesor = Profesor.objects.get(username=request.user.username)
+    grupo = Grupo.objects.get(numero=numero, profesor=profesor)
+    alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
+    promedio = promedio_alumno(numero, lista)
+    return render(request, 'dashboard_alumno.html', {'grupo': grupo, 'alumno': alumno, 'promedio': promedio})
+
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
     profesores = Profesor.objects.all()
@@ -210,12 +217,39 @@ def intentos_grupo(request, numero):
         })
     return JsonResponse({"intentos": datos})
 
+def intentos_alumno(request, numero, lista):
+    grupo = Grupo.objects.get(numero=numero)
+    alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
+    intentos = Intentos.objects.filter(alumno=alumno)
+    datos = []
+    for intento in intentos:
+        datos.append({
+            "aciertos": intento.aciertos,
+            "timestamp": intento.timestamp
+        })
+    return JsonResponse({"intentos": datos})
+
 def promedio_grupo(numero):
     suma = 0
     elementos = 0
     grupo = Grupo.objects.get(numero=numero)
     alumnos = Alumno.objects.filter(grupo=grupo)
     intentos = Intentos.objects.filter(alumno__in=alumnos)
+    for intento in intentos:
+        suma += intento.aciertos
+        elementos += 1
+    try:
+        promedio = round(suma / elementos, 3)
+    except:
+        promedio = 0
+    return promedio
+
+def promedio_alumno(numero, lista):
+    suma = 0
+    elementos = 0
+    grupo = Grupo.objects.get(numero=numero)
+    alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
+    intentos = Intentos.objects.filter(alumno=alumno)
     for intento in intentos:
         suma += intento.aciertos
         elementos += 1

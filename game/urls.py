@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin', views.login_admin, name='admin'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('dashboard/<int:numero>', views.dashboard_group, name='dashboard_group'),
+    path('dashboard/<int:numero>/<int:lista>', views.dashboard_alumno, name='dashboard_alumno'),
     path('manage', views.manage, name='manage'),
     path('manage/<int:numero>', views.manage_group, name='manage_group'),
     path('new_alumno', views.new_alumno, name='new_alumno'),
@@ -21,5 +22,6 @@ urlpatterns = [
     path('progreso', views.progreso, name='progreso'),
     path('nuevo_intento', views.nuevo_intento, name='nuevo_intento'),
     path('intentos_grupo/<int:numero>', views.intentos_grupo, name='intentos_grupo'),
+    path('intentos_alumno/<int:numero>/<int:lista>', views.intentos_alumno, name='intentos_alumno'),
     path('update', views.update, name='update'),
 ]
