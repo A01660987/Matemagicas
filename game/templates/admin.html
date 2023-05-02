@@ -12,9 +12,9 @@
     <div class="container-fluid">
         <a class="navbar-brand logo" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
         <div class="navbar-nav ms-auto">
-            <a class="nav-link fs-3 px-4" href="/">inicio</a>
-            <a class="nav-link fs-3 px-4" href="/login">dashboard</a>
-            <a class="nav-link fw-semibold fs-3 px-4 active user-select-none" aria-current="page">admin</a>
+            <a class="nav-link fs-3 px-4" href="/">Inicio</a>
+            <a class="nav-link fs-3 px-4" href="/login">Dashboard</a>
+            <a class="nav-link fw-semibold fs-3 px-4 active user-select-none" aria-current="page">Admin</a>
         </div>
     </div>
 </nav>
@@ -22,17 +22,17 @@
 <div class="row">
     <div class="col-8">
         <h1 class="display-1 lh-1 mb-4 fw-medium text-white">
-            inicia sesión como administrador
+            Inicia sesión como administrador
         </h1>
         <form method="post">
             {% csrf_token %}
             <div class="mb-4">
-                <input name="username" type="username" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="usuario">
+                <input name="username" type="username" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="Usuario">
             </div>
             <div class="mb-4">
-                <input name="password" type="password" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="contraseña">
+                <input name="password" type="password" class="fs-2 text-center form-control-lg rounded-pill shadow" placeholder="Contraseña">
             </div>
-            <button type="submit" class="btn px-4 fs-2 mb-4 fw-medium text-center form-control-lg rounded-pill shadow bg-purple text-white">iniciar sesión</button>
+            <button type="submit" class="btn px-4 fs-2 mb-4 fw-medium text-center form-control-lg rounded-pill shadow bg-purple text-white">Iniciar sesión</button>
         </form>
 
         {% for message in messages %}

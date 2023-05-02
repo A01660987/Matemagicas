@@ -13,17 +13,17 @@
 
 <nav class="navbar navbar-expand-lg mb-3" data-bs-theme="dark">
     <div class="container-fluid">
-        <span class="navbar-brand fs-1 fw-semibold">dashboard de {{ request.user.first_name }}</span>
+        <span class="navbar-brand fs-1 fw-semibold">Dashboard de {{ request.user.first_name }}</span>
         <a class="navbar-brand logo ms-auto" href="/"><img src="{% static 'svg/matemagicas-logo.svg' %}" height="70" draggable="false"></a>
     </div>
 </nav>
 
 <div>
-    <h1 class="text-white ps-3">grupo {{ grupo.numero }}</h1>
+    <h1 class="text-white ps-3">Grupo {{ grupo.numero }}</h1>
 </div>
 
 <div>
-    <h1 class="text-white ps-3">alumnos:</h1>
+    <h1 class="text-white ps-3">Alumnos:</h1>
     <div class="container-fluid d-flex flex-wrap mb-5">
         {% for alumno in alumnos %}
             <a href="/dashboard/{{ grupo.numero }}/{{ alumno.num_lista }}" type="button" class="btn px-4 me-3 mb-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ alumno.num_lista }}. {{ alumno.first_name }} {{ alumno.last_name }}</a>
@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<h2 class="ps-3 text-white">promedio de aciertos en el nivel 3: <strong>{{ promedio }}</strong></h2>
+<h2 class="ps-3 text-white">Promedio de aciertos en el nivel 3: <strong>{{ promedio }}</strong></h2>
 
 <div class="bg-light mt-3 mb-5 rounded-3">
     <canvas id="intentos_grupo" height="100"></canvas>
@@ -78,7 +78,7 @@
 </script>
 
 <div class="container-fluid d-flex">
-    <a href="/dashboard" type="button" class="btn px-4 ms-auto mb-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
+    <a href="/dashboard" type="button" class="btn px-4 ms-auto mb-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Regresar</a>
 </div>
 
 {% endblock %}

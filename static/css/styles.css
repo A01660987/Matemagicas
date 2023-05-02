@@ -1,28 +1,29 @@
 @font-face {
-    font-family: "League Spartan";
-    src: url("../ttf/League Spartan.ttf") format("woff2 supports variations"),
-         url("../ttf/League Spartan.ttf") format("woff2-variations");
+    font-family: "Dosis";
+    src: url("../ttf/Dosis.ttf") format("woff2 supports variations"),
+         url("../ttf/Dosis.ttf") format("woff2-variations");
     font-weight: 100 1000;
   }
 
 :root {
-    --bs-body-font-family: "League Spartan";
+    --bs-body-font-family: "Dosis";
 }
 
-.bg-blur {
-    background: radial-gradient(circle at 25% -8%, rgb(36, 15, 70), rgb(4, 2, 8) 45%);
+.bg-colors {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('../svg/bg.svg');
+    background-size: cover;
     background-attachment: fixed;
 }
 
 .bg-purple {
-    --bs-btn-bg: rgba(54, 22, 105, 1);
-    --bs-btn-hover-bg: rgba(54, 22, 105, 0.7);
-    --bs-btn-hover-border-color: rgba(54, 22, 105, 0.7);
+    --bs-btn-bg: rgba(32, 180, 153, 1);
+    --bs-btn-hover-bg: rgba(32, 180, 153, 0.7);
+    --bs-btn-hover-border-color: rgba(32, 180, 153, 0.7);
 }
 
 :not(.btn-check)+.btn:active.bg-purple {
-    --bs-btn-active-bg: rgba(54, 22, 105, 0.5);
-    --bs-btn-active-border-color: rgba(54, 22, 105, 0.5);
+    --bs-btn-active-bg: rgba(32, 180, 153, 0.5);
+    --bs-btn-active-border-color: rgba(32, 180, 153, 0.5);
 }
 
 .logo {

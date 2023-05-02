@@ -26,11 +26,11 @@
 </div>
 
 <div>
-    <h1 class="text-white ps-3">profesor: {{ profesor.first_name }} {{ profesor.last_name }}</h1>
+    <h1 class="text-white ps-3">Profesor: {{ profesor.first_name }} {{ profesor.last_name }}</h1>
 </div>
 
 <div>
-    <h1 class="text-white ps-3">alumnos:</h1>
+    <h1 class="text-white ps-3">Alumnos:</h1>
     <div class="container-fluid d-flex flex-wrap mb-5">
         {% for alumno in alumnos %}
             <button type="button" data-bs-toggle="modal" data-bs-target="#del_alum" class="btn px-4 me-3 mb-4 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ alumno.num_lista }}. {{ alumno.first_name }} {{ alumno.last_name }}</button>
@@ -39,10 +39,10 @@
 </div>
 
 <div class="container-fluid d-flex">
-    <button type="button" data-bs-toggle="modal" data-bs-target="#newalum" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar alumno</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#delalum" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">eliminar alumno</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#delgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">eliminar grupo</button>
-    <a href="/manage" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">regresar</a>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newalum" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Agregar alumno</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delalum" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Eliminar alumno</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">Eliminar grupo</button>
+    <a href="/manage" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Regresar</a>
 </div>
 
 <div class="modal fade" data-bs-theme="dark" id="delalum" tabindex="-1">

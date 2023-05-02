@@ -26,16 +26,16 @@
 </div>
 
 <div>
-    <h1 class="text-white ps-3">todos los grupos:</h1>
+    <h1 class="text-white ps-3">Todos los grupos:</h1>
     <div class="container-fluid d-flex mb-5">
         {% for grupo in grupos %}
-            <a href="manage/{{ grupo.numero }}" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">grupo {{ grupo.numero }}</a>
+            <a href="manage/{{ grupo.numero }}" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Grupo {{ grupo.numero }}</a>
         {% endfor %}
     </div>
 </div>
 
 <div>
-    <h1 class="text-white ps-3">todos los profesores:</h1>
+    <h1 class="text-white ps-3">Todos los profesores:</h1>
     <div class="container-fluid d-flex mb-5">
         {% for profesor in profesores %}
             <a class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">{{ profesor.first_name }} {{ profesor.last_name }}</a>
@@ -44,11 +44,11 @@
 </div>
 
 <div class="container-fluid d-flex">
-    <button type="button" data-bs-toggle="modal" data-bs-target="#newprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">agregar profesor</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#edit" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">editar profesor</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#delprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">eliminar profesor</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">crear grupo</button>
-    <a href="/logout" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">cerrar sesión</a>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Agregar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#edit" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Editar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#delprof" class="btn px-4 me-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-danger shadow">Eliminar profesor</button>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#newgroup" class="btn px-4 mx-3 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Crear grupo</button>
+    <a href="/logout" type="button" class="btn px-4 ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Cerrar sesión</a>
 </div>
 
 <div class="modal fade" data-bs-theme="dark" id="newprof" tabindex="-1">
