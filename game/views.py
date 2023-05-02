@@ -169,9 +169,8 @@ def del_alumno(request):
 @csrf_exempt
 def validar_estudiante(request):
     if(request.method == 'POST'):
-        data = json.loads(request.body)
-        numero = data['grupo']
-        num_lista = data['num_lista']
+        numero = request.POST['grupo']
+        num_lista = request.POST['num_lista']
         try:
             grupo = Grupo.objects.get(numero=numero)
             alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
@@ -182,10 +181,9 @@ def validar_estudiante(request):
 @csrf_exempt        
 def progreso(request):
     if(request.method == 'POST'):
-        data = json.loads(request.body)
-        numero = data['grupo']
-        num_lista = data['num_lista']
-        nivel_actual = data['nivel_actual']
+        numero = request.POST['grupo']
+        num_lista = request.POST['num_lista']
+        nivel_actual = request.POST['nivel_actual']
         grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
         alumno.nivel_actual = nivel_actual
@@ -195,11 +193,10 @@ def progreso(request):
 @csrf_exempt
 def nuevo_intento(request):
     if(request.method == 'POST'):
-        data = json.loads(request.body)
-        numero = data['grupo']
-        num_lista = data['num_lista']
-        aciertos = data['aciertos']
-        nivel = data['nivel']
+        numero = request.POST['grupo']
+        num_lista = request.POST['num_lista']
+        aciertos = request.POST['aciertos']
+        nivel = request.POST['nivel']
         grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
         intento = Intentos(alumno=alumno, aciertos=aciertos, nivel=nivel)
