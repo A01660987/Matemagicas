@@ -23,6 +23,7 @@ class Alumno(models.Model):
 class Intentos(models.Model):
     alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE, related_name='intentos')
     aciertos = models.IntegerField(null=False)
+    nivel = models.IntegerField(null=False)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Ajustes(models.Model):

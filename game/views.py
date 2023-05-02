@@ -199,9 +199,10 @@ def nuevo_intento(request):
         numero = data['grupo']
         num_lista = data['num_lista']
         aciertos = data['aciertos']
+        nivel = data['nivel']
         grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
-        intento = Intentos(alumno=alumno, aciertos=aciertos)
+        intento = Intentos(alumno=alumno, aciertos=aciertos, nivel=nivel)
         intento.save()
         return JsonResponse({"success": True})
 
