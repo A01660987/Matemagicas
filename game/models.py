@@ -1,7 +1,4 @@
 from django.db import models
-from datetime import date
-import json
-
 
 class Profesor(models.Model):
     first_name = models.CharField(max_length=100)
@@ -10,27 +7,22 @@ class Profesor(models.Model):
     password = models.CharField(max_length=100)
     
 class Grupo(models.Model):
-    profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, related_name='grupos')
+    profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE)
     numero = models.IntegerField(unique=True)
     
 class Alumno(models.Model):
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, related_name='alumnos')
-    num_lista = models.IntegerField()
+    grupo = models.ForeignKey(Grupo, null=False, on_delete=models.CASCADE)
+    num_lista = models.IntegerField(null=False)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     nivel_actual = models.IntegerField(default=1)
     
 class Intentos(models.Model):
-    alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE, related_name='intentos')
+    alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE)
     aciertos = models.IntegerField(null=False)
     nivel = models.IntegerField(null=False)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Equivocaciones(models.Model):
-    alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE, related_name='equivocaciones')
-    tipo = models.IntegerField(null=False)
-
-class Ajustes(models.Model):
     alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE)
-    volumen = models.IntegerField(null=False)
-    dificultad = models.CharField(max_length=1, null=False)
+    tipo = models.IntegerField(null=False)
