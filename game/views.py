@@ -60,15 +60,19 @@ def dashboard_group(request, numero):
     profesor = Profesor.objects.get(username=request.user.username)
     grupo = Grupo.objects.get(numero=numero, profesor=profesor)
     alumnos = Alumno.objects.filter(grupo=grupo)
-    promedio = promedio_grupo(numero)
-    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio': promedio})
+    promedio1 = promedio_grupo(numero, 1)
+    promedio2 = promedio_grupo(numero, 2)
+    promedio3 = promedio_grupo(numero, 3)
+    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3})
 
 def dashboard_alumno(request, numero, lista):
     profesor = Profesor.objects.get(username=request.user.username)
     grupo = Grupo.objects.get(numero=numero, profesor=profesor)
     alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
-    promedio = promedio_alumno(numero, lista)
-    return render(request, 'dashboard_alumno.html', {'grupo': grupo, 'alumno': alumno, 'promedio': promedio})
+    promedio1 = promedio_alumno(numero, lista, 1)
+    promedio2 = promedio_alumno(numero, lista, 2)
+    promedio3 = promedio_alumno(numero, lista, 3)
+    return render(request, 'dashboard_alumno.html', {'grupo': grupo, 'alumno': alumno, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3})
 
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
@@ -203,10 +207,10 @@ def nuevo_intento(request):
         intento.save()
         return JsonResponse({"success": True})
 
-def intentos_grupo(request, numero):
+def intentos_grupo(request, numero, nivel):
     grupo = Grupo.objects.get(numero=numero)
     alumnos = Alumno.objects.filter(grupo=grupo)
-    intentos = Intentos.objects.filter(alumno__in=alumnos)
+    intentos = Intentos.objects.filter(alumno__in=alumnos, nivel=nivel)
     datos = []
     for intento in intentos:
         datos.append({
@@ -215,10 +219,10 @@ def intentos_grupo(request, numero):
         })
     return JsonResponse({"intentos": datos})
 
-def intentos_alumno(request, numero, lista):
+def intentos_alumno(request, numero, lista, nivel):
     grupo = Grupo.objects.get(numero=numero)
     alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
-    intentos = Intentos.objects.filter(alumno=alumno)
+    intentos = Intentos.objects.filter(alumno=alumno, nivel=nivel)
     datos = []
     for intento in intentos:
         datos.append({
@@ -227,12 +231,12 @@ def intentos_alumno(request, numero, lista):
         })
     return JsonResponse({"intentos": datos})
 
-def promedio_grupo(numero):
+def promedio_grupo(numero, nivel):
     suma = 0
     elementos = 0
     grupo = Grupo.objects.get(numero=numero)
     alumnos = Alumno.objects.filter(grupo=grupo)
-    intentos = Intentos.objects.filter(alumno__in=alumnos)
+    intentos = Intentos.objects.filter(alumno__in=alumnos, nivel=nivel)
     for intento in intentos:
         suma += intento.aciertos
         elementos += 1
@@ -242,12 +246,12 @@ def promedio_grupo(numero):
         promedio = 0
     return promedio
 
-def promedio_alumno(numero, lista):
+def promedio_alumno(numero, lista, nivel):
     suma = 0
     elementos = 0
     grupo = Grupo.objects.get(numero=numero)
     alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
-    intentos = Intentos.objects.filter(alumno=alumno)
+    intentos = Intentos.objects.filter(alumno=alumno, nivel=nivel)
     for intento in intentos:
         suma += intento.aciertos
         elementos += 1
@@ -278,3 +282,15 @@ def update(request):
         profe.save()
         messages.success(request, 'profesor editado exitosamente')
     return redirect('manage')
+
+@csrf_exempt
+def equivocacion(request):
+    if(request.method == 'POST'):
+        numero = request.POST['grupo']
+        num_lista = request.POST['num_lista']
+        tipo = request.POST['aciertos']
+        grupo = Grupo.objects.get(numero=numero)
+        alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
+        equivocacion = Equivocaciones(alumno=alumno, tipo=tipo)
+        equivocacion.save()
+        return JsonResponse({"success": True})

@@ -21,7 +21,8 @@ urlpatterns = [
     path('validar_estudiante', views.validar_estudiante, name='validar_estudiante'),
     path('progreso', views.progreso, name='progreso'),
     path('nuevo_intento', views.nuevo_intento, name='nuevo_intento'),
-    path('intentos_grupo/<int:numero>', views.intentos_grupo, name='intentos_grupo'),
-    path('intentos_alumno/<int:numero>/<int:lista>', views.intentos_alumno, name='intentos_alumno'),
+    path('intentos_grupo/<int:numero>/<int:nivel>', views.intentos_grupo, name='intentos_grupo'),
+    path('intentos_alumno/<int:numero>/<int:lista>/<int:nivel>', views.intentos_alumno, name='intentos_alumno'),
     path('update', views.update, name='update'),
+    path('equivocacion', views.equivocacion, name='equivocacion')
 ]

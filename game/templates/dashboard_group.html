@@ -31,25 +31,37 @@
     </div>
 </div>
 
-<h2 class="ps-3 text-white">Promedio de aciertos en el nivel 3: <strong>{{ promedio }}</strong></h2>
+<h2 class="ps-3 text-white">Promedio de aciertos en el nivel 3: <strong>{{ promedio3 }}</strong></h2>
 
-<div class="bg-light mt-3 mb-5 rounded-3">
-    <canvas id="intentos_grupo" height="100"></canvas>
+<div class="row mt-3">
+    <div class="bg-light mb-5 rounded-3 col mx-2 p-3">
+        <h3 class="ps-3 text-center">Promedio nivel 1: <strong>{{ promedio1 }}</strong></h2>
+        <canvas id="intentos_grupo_1" height="300"></canvas>
+    </div>
+    <div class="bg-light mb-5 rounded-3 col mx-2 p-3">
+        <h3 class="ps-3 text-center">Promedio nivel 2: <strong>{{ promedio2 }}</strong></h2>
+        <canvas id="intentos_grupo_2" height="300"></canvas>
+    </div>
+    <div class="bg-light mb-5 rounded-3 col mx-2 p-3">
+        <h3 class="ps-3 text-center">Promedio nivel 3: <strong>{{ promedio3 }}</strong></h2>
+        <canvas id="intentos_grupo_3" height="300"></canvas>
+    </div>
 </div>
+
 <script>
-    $.getJSON('/intentos_grupo/{{ grupo.numero }}', function(data) {
+    $.getJSON('/intentos_grupo/{{ grupo.numero }}/1', function(data) {
         var datos = data.intentos;
         var aciertos = datos.map(function(d) { return d.aciertos });
 
         var fechas = datos.map(function(d) { return new Date(d.timestamp) });
 
-        const ctx = document.getElementById('intentos_grupo');
+        const ctx = document.getElementById('intentos_grupo_1');
         new Chart(ctx, {
             type: 'scatter',
             data: {
                 labels: fechas,
                 datasets: [{
-                    label: 'Aciertos',
+                    label: 'Intento',
                     data: aciertos,
                     backgroundColor: 'rgba(255, 99, 132, 0.5)'
                 }]
@@ -66,7 +78,89 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: "Intentos y aciertos del grupo {{ grupo.numero }}"
+                        text: "Intentos y aciertos del grupo {{ grupo.numero }} en el nivel 1"
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    $.getJSON('/intentos_grupo/{{ grupo.numero }}/2', function(data) {
+        var datos = data.intentos;
+        var aciertos = datos.map(function(d) { return d.aciertos });
+
+        var fechas = datos.map(function(d) { return new Date(d.timestamp) });
+
+        const ctx = document.getElementById('intentos_grupo_2');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                labels: fechas,
+                datasets: [{
+                    label: 'Intento',
+                    data: aciertos,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Intentos y aciertos del grupo {{ grupo.numero }} en el nivel 2"
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    $.getJSON('/intentos_grupo/{{ grupo.numero }}/3', function(data) {
+        var datos = data.intentos;
+        var aciertos = datos.map(function(d) { return d.aciertos });
+
+        var fechas = datos.map(function(d) { return new Date(d.timestamp) });
+
+        const ctx = document.getElementById('intentos_grupo_3');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                labels: fechas,
+                datasets: [{
+                    label: 'Intento',
+                    data: aciertos,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Intentos y aciertos del grupo {{ grupo.numero }} en el nivel 3"
                     },
                     legend: {
                         position: 'bottom'

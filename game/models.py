@@ -26,6 +26,10 @@ class Intentos(models.Model):
     nivel = models.IntegerField(null=False)
     timestamp = models.DateTimeField(auto_now=True)
 
+class Equivocaciones(models.Model):
+    alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE, related_name='equivocaciones')
+    tipo = models.IntegerField(null=False)
+
 class Ajustes(models.Model):
     alumno = models.ForeignKey(Alumno, null=False, on_delete=models.CASCADE)
     volumen = models.IntegerField(null=False)
