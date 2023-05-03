@@ -46,6 +46,21 @@
     </div>
 </div>
 
+<div class="row mb-5">
+    <div class="col-5 p-4 bg-light rounded-3">
+        <h1>Respuestas equivocadas del grupo {{ grupo.numero }}:</h1>
+        <h2>Suma: {{ eq1 }}</h2>
+        <h2>Resta: {{ eq2 }}</h2>
+        <h2>Multiplicación: {{ eq3 }}</h2>
+        <h2>División: {{ eq4 }}</h2>
+        <h2>Comparación: {{ eq5 }}</h2>
+    </div>
+
+    <div class="col d-flex">
+        <a href="/dashboard" type="button" class="btn px-4 mt-auto ms-auto fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Regresar</a>
+    </div>
+</div>
+
 <script>
     $.getJSON('/intentos_grupo/{{ grupo.numero }}/1', function(data) {
         var datos = data.intentos;
@@ -168,9 +183,5 @@
         });
     });
 </script>
-
-<div class="container-fluid d-flex">
-    <a href="/dashboard" type="button" class="btn px-4 ms-auto mb-5 fs-2 fw-medium text-center form-control-lg rounded-pill btn-light shadow">Regresar</a>
-</div>
 
 {% endblock %}

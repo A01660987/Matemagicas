@@ -63,7 +63,12 @@ def dashboard_group(request, numero):
     promedio1 = promedio_grupo(numero, 1)
     promedio2 = promedio_grupo(numero, 2)
     promedio3 = promedio_grupo(numero, 3)
-    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3})
+    eq1 = eq_grupo(numero, 1)
+    eq2 = eq_grupo(numero, 2)
+    eq3 = eq_grupo(numero, 3)
+    eq4 = eq_grupo(numero, 4)
+    eq5 = eq_grupo(numero, 5)
+    return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3, 'eq1': eq1, 'eq2': eq2, 'eq3': eq3, 'eq4': eq4, 'eq5': eq5})
 
 def dashboard_alumno(request, numero, lista):
     profesor = Profesor.objects.get(username=request.user.username)
@@ -72,7 +77,12 @@ def dashboard_alumno(request, numero, lista):
     promedio1 = promedio_alumno(numero, lista, 1)
     promedio2 = promedio_alumno(numero, lista, 2)
     promedio3 = promedio_alumno(numero, lista, 3)
-    return render(request, 'dashboard_alumno.html', {'grupo': grupo, 'alumno': alumno, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3})
+    eq1 = eq_alumno(numero, lista, 1)
+    eq2 = eq_alumno(numero, lista, 2)
+    eq3 = eq_alumno(numero, lista, 3)
+    eq4 = eq_alumno(numero, lista, 4)
+    eq5 = eq_alumno(numero, lista, 5)
+    return render(request, 'dashboard_alumno.html', {'grupo': grupo, 'alumno': alumno, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3, 'eq1': eq1, 'eq2': eq2, 'eq3': eq3, 'eq4': eq4, 'eq5': eq5})
 
 @user_passes_test(lambda u: u.is_superuser)
 def manage(request):
@@ -288,9 +298,21 @@ def equivocacion(request):
     if(request.method == 'POST'):
         numero = request.POST['grupo']
         num_lista = request.POST['num_lista']
-        tipo = request.POST['aciertos']
+        tipo = request.POST['tipo']
         grupo = Grupo.objects.get(numero=numero)
         alumno = Alumno.objects.get(grupo=grupo, num_lista=num_lista)
         equivocacion = Equivocaciones(alumno=alumno, tipo=tipo)
         equivocacion.save()
         return JsonResponse({"success": True})
+    
+def eq_grupo(numero, tipo):
+    grupo = Grupo.objects.get(numero=numero)
+    alumnos = Alumno.objects.filter(grupo=grupo)
+    equivocaciones = Equivocaciones.objects.filter(alumno__in=alumnos, tipo=tipo)
+    return len(equivocaciones)
+
+def eq_alumno(numero, lista, tipo):
+    grupo = Grupo.objects.get(numero=numero)
+    alumno = Alumno.objects.get(grupo=grupo, num_lista=lista)
+    equivocaciones = Equivocaciones.objects.filter(alumno=alumno, tipo=tipo)
+    return len(equivocaciones)
