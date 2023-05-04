@@ -56,6 +56,7 @@ def dashboard(request):
     grupos = Grupo.objects.filter(profesor=profesor)
     return render(request, 'dashboard.html', {'grupos': grupos})
 
+@login_required
 def dashboard_group(request, numero):
     profesor = Profesor.objects.get(username=request.user.username)
     grupo = Grupo.objects.get(numero=numero, profesor=profesor)
@@ -70,6 +71,7 @@ def dashboard_group(request, numero):
     eq5 = eq_grupo(numero, 5)
     return render(request, 'dashboard_group.html', {'grupo': grupo, 'alumnos': alumnos, 'promedio1': promedio1, 'promedio2': promedio2, 'promedio3': promedio3, 'eq1': eq1, 'eq2': eq2, 'eq3': eq3, 'eq4': eq4, 'eq5': eq5})
 
+@login_required
 def dashboard_alumno(request, numero, lista):
     profesor = Profesor.objects.get(username=request.user.username)
     grupo = Grupo.objects.get(numero=numero, profesor=profesor)
@@ -127,6 +129,7 @@ def new_group(request):
             messages.success(request, 'grupo creado exitosamente')
     return redirect('manage')
 
+@user_passes_test(lambda u: u.is_superuser)
 def manage_group(request, numero):
     grupo = Grupo.objects.get(numero=numero)
     alumnos = Alumno.objects.filter(grupo=grupo)
